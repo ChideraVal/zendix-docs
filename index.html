@@ -449,9 +449,13 @@
 
             /* 3. Keep the endpoint URLs wrapping so they don't cause horizontal body scroll */
             .endpoint {
-                max-width: 100%;
-                white-space: normal;
-                word-break: break-all;
+                white-space: nowrap; 
+                word-break: normal;
+                overflow-x: auto;
+            }
+
+            .logo {
+                margin-top: 40px;
             }
         }
 
