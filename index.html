@@ -431,13 +431,27 @@
                 font-size: 40px;
             }
 
-            /* 3. THE FIX for the stretching tables and endpoints */
+            /* 1. Make the table a scrollable block */
+            .mini-table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; /* Adds smooth momentum scrolling on iOS */
+            }
+
+            /* 2. Prevent the text from cramping/wrapping, which forces the scrollbar to appear */
+            .mini-table th,
             .mini-table td,
-            .mini-table td code,
+            .mini-table td code {
+                white-space: nowrap; 
+                word-break: normal;
+            }
+
+            /* 3. Keep the endpoint URLs wrapping so they don't cause horizontal body scroll */
             .endpoint {
-                white-space: normal; /* Allows text to wrap instead of staying on one line */
-                overflow-wrap: anywhere; /* Forces long strings like 'duplicate_client_reference_id' to break */
-                word-break: break-word;
+                max-width: 100%;
+                white-space: normal;
+                word-break: break-all;
             }
         }
 
