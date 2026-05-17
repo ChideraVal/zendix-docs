@@ -404,14 +404,16 @@
 
             body {
                 flex-direction: column;
+                overflow-x: hidden;
             }
 
             .sidebar {
                 position: fixed;
                 left: 0;
                 top: 0;
+                bottom: 0;
                 width: 280px;
-                height: 100vh;
+                height: 100dvh;
                 transform: translateX(-110%);
                 border-right: 1px solid var(--border);
                 border-bottom: none;
@@ -427,6 +429,15 @@
 
             h1 {
                 font-size: 40px;
+            }
+
+            /* 3. THE FIX for the stretching tables and endpoints */
+            .mini-table td,
+            .mini-table td code,
+            .endpoint {
+                white-space: normal; /* Allows text to wrap instead of staying on one line */
+                overflow-wrap: anywhere; /* Forces long strings like 'duplicate_client_reference_id' to break */
+                word-break: break-word;
             }
         }
 
