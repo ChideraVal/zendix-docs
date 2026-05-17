@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zendix API - Developer Documentation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --sidebar-bg: #fafafa;
+            --border: #e5e7eb;
+            --text: #111827;
+            --muted: #6b7280;
+            --code-bg: #111827;
+            --code-text: #f9fafb;
+            --hover: #f3f4f6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border);
+            background: var(--sidebar-bg);
+            padding: 32px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.25s ease;
+            z-index: 1500;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .logo-subtext {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .nav-group {
+            margin-bottom: 32px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--hover);
+        }
+
+        .nav-links a.active {
+            background: var(--text);
+            color: white;
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            padding: 60px 80px;
+            max-width: 1000px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 52px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.04em;
+        }
+
+        .hero-text {
+            font-size: 19px;
+            color: var(--muted);
+            max-width: 760px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-top: 80px;
+            scroll-margin-top: 32px;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            margin-bottom: 18px;
+            letter-spacing: -0.03em;
+        }
+
+        .section p {
+            color: #374151;
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        .steps {
+            display: grid;
+            gap: 20px;
+            margin-top: 28px;
+        }
+
+        .step-card {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            background: white;
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--text);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .step-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            margin-bottom: 0;
+        }
+
+        .workflow {
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 28px;
+            overflow-x: auto;
+        }
+
+        .workflow-line {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 700px;
+        }
+
+        .workflow-box {
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: white;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .arrow {
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .code-block {
+            position: relative;
+            margin-top: 28px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--code-bg);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        pre {
+            overflow-x: auto;
+            padding: 24px;
+            color: var(--code-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .info-box {
+            margin-top: 24px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .mini-table th,
+        .mini-table td {
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .mini-table th {
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .mini-table td {
+            font-size: 15px;
+        }
+
+        .endpoint {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #f3f4f6;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .method {
+            color: #047857;
+            font-weight: 700;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 2100;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 1200;
+        }
+
+        .show-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 12px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--hover);
+        }
+
+        .tab-btn.active {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .sidebar-link-inset {
+            padding-left: 16px;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 280px;
+                height: 100vh;
+                transform: translateX(-110%);
+                border-right: 1px solid var(--border);
+                border-bottom: none;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content {
+                padding: 90px 24px 40px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 34px;
+            }
+
+            .hero-text {
+                font-size: 17px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open navigation">☰</button>
+    <div class="mobile-overlay" onclick="closeSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">Zendix</div>
+        <div class="logo-subtext">Developer Documentation</div>
+
+        <div class="nav-group">
+            <div class="nav-title">Getting started</div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link active">Overview</a>
+                <a href="#how-it-works" class="nav-link">How it works</a>
+                <a href="#first-request" class="nav-link">Your first request</a>
+            </div>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">API</div>
+            <div class="nav-links">
+                <a href="#authentication" class="nav-link">Authentication</a>
+                <a href="#list-jobs" class="nav-link">List jobs</a>
+                <a href="#create-job" class="nav-link">Create job</a>
+                <a href="#job-details" class="nav-link">Get job details</a>
+                <a href="#retry-job" class="nav-link">Retry job</a>
+                <a href="#delete-job" class="nav-link">Delete job</a>
+                <a href="#job-by-reference" class="nav-link">Get by reference ID</a>
+            </div>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">Limits & system</div>
+            <div class="nav-links">
+                <a href="#rate-limiting" class="nav-link">Rate limiting</a>
+                <a href="#file-limits" class="nav-link">File limits</a>
+                <a href="#error-codes" class="nav-link">Error codes</a>
+                <a href="#webhooks" class="nav-link">Webhooks</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="content">
+        <section id="overview" class="section docs-section">
+            <div class="hero-badge"><span>✨</span><span>AI-powered document extraction API</span></div>
+            <h1>Extract structured data from documents using AI.</h1>
+            <p class="hero-text">Zendix helps developers extract structured JSON data from invoices, receipts, purchase
+                orders, PDFs, images, forms, and other business documents using asynchronous AI extraction jobs.</p>
+
+            <div class="steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Create a schema</h3>
+                    <p>Create a schema in the Zendix dashboard that defines the exact fields you want to extract from
+                        documents.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Send files or text</h3>
+                    <p>Upload files, send text content, or combine both in a single extraction request.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Receive structured JSON</h3>
+                    <p>Zendix processes the job asynchronously and returns structured extraction results through polling
+                        or webhooks.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="section docs-section">
+            <h2>How Zendix works</h2>
+            <p>Zendix uses asynchronous extraction jobs. This allows your application to continue running while AI
+                processing happens in the background.</p>
+            <p>When you create a job, Zendix immediately returns a job ID. You can then either poll the job details
+                endpoint or configure webhooks to receive results automatically.</p>
+            <div class="workflow">
+                <div class="workflow-line">
+                    <div class="workflow-box">Create Request</div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-box">Upload Files</div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-box">Queue Job</div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-box">AI Processing</div>
+                    <div class="arrow">→</div>
+                    <div class="workflow-box">Structured Result</div>
+                </div>
+            </div>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Job Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>pending</code></td>
+                        <td>The job has been created and is waiting to complete.</td>
+                    </tr>
+                    <tr>
+                        <td><code>successful</code></td>
+                        <td>The extraction completed successfully and results are available.</td>
+                    </tr>
+                    <tr>
+                        <td><code>failed</code></td>
+                        <td>The extraction failed and an error message is available.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="first-request" class="section docs-section">
+            <h2>Your first request</h2>
+            <p>The example below uploads an invoice PDF and creates a new extraction job using a schema ID.</p>
+            <div class="endpoint"><span class="method">POST</span><span>/api/v1/jobs/create/</span></div>
+
+            <div class="tabs" data-group="first-request">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'first-request', 'first-request-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'first-request', 'first-request-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'first-request', 'first-request-curl')">cURL</button>
+            </div>
+
+            <div id="first-request-python" class="tab-panel active" data-group="first-request">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+url = "https://zendix.app/api/v1/jobs/create/"
+
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+files = [
+    ("files", open("invoice.pdf", "rb"))
+]
+
+payload = {
+    "schema_id": 12,
+    "document_type": "invoice",
+    "client_reference_id": "inv_001"
+}
+
+response = requests.post(url, headers=headers, files=files, data=payload)
+print(response.json())</code></pre>
+                </div>
+            </div>
+
+            <div id="first-request-javascript" class="tab-panel" data-group="first-request">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const formData = new FormData();
+
+formData.append("schema_id", 12);
+formData.append("document_type", "invoice");
+formData.append("client_reference_id", "inv_001");
+formData.append("files", fileInput.files[0]);
+
+const response = await fetch("https://zendix.app/api/v1/jobs/create/", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer YOUR_API_KEY"
+  },
+  body: formData
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+
+            <div id="first-request-curl" class="tab-panel" data-group="first-request">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl -X POST https://zendix.app/api/v1/jobs/create/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "schema_id=12" \
+  -F "document_type=invoice" \
+  -F "client_reference_id=inv_001" \
+  -F "files=@invoice.pdf"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "status": "pending",
+    "result": null,
+    "error": null
+  },
+  "meta": {
+    "job_id": 145,
+    "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+  }
+}</code></pre>
+            </div>
+
+            <!-- <div class="code-block">
+                <div class="code-header"><span>Error Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "invalid_schema_id",
+    "message": "The provided schema does not exist."
+  },
+  "meta": null
+}</code></pre>
+            </div> -->
+
+            <div class="info-box"><strong>What happens next?</strong>
+                <p>Once the job is created, Zendix processes it in the background. You can either poll the job details
+                    endpoint for updates or configure webhooks to receive extraction results automatically.</p>
+            </div>
+        </section>
+
+        <section id="authentication" class="section docs-section">
+            <h2>Authentication</h2>
+            <p>All Zendix API requests must include your API key in the <code>Authorization</code> header.</p>
+            <p>API keys authenticate requests and identify the business making the request.</p>
+            <div class="info-box"><strong>Keep your API keys secure</strong>
+                <p>Your API keys provide full access to your Zendix account. Never expose them in frontend applications,
+                    public repositories, or client-side code.</p>
+            </div>
+
+            <div class="steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Create an API key</h3>
+                    <p>Generate an API key from the Zendix dashboard.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Include it in requests</h3>
+                    <p>Send the API key in the <code>Authorization</code> header using the Bearer format.</p>
+                </div>
+            </div>
+
+            <div class="tabs" data-group="authentication">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'authentication', 'authentication-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'authentication', 'authentication-javascript')">JavaScript</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'authentication', 'authentication-curl')">cURL</button>
+            </div>
+
+            <div id="authentication-python" class="tab-panel active" data-group="authentication">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>response = requests.get(url, headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+})
+</code></pre>
+                </div>
+            </div>
+            <div id="authentication-javascript" class="tab-panel" data-group="authentication">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const response = await fetch(url, {
+  headers: {
+    Authorization: "Bearer YOUR_API_KEY"
+  }
+});</code></pre>
+                </div>
+            </div>
+            <div id="authentication-curl" class="tab-panel" data-group="authentication">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl https://zendix.app/api/v1/jobs/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 80px;">Authentication errors</h2>
+            <p>Zendix returns standardized error responses when authentication fails.</p>
+
+            <!-- <div class="code-block">
+                <div class="code-header"><span>Missing API Key</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "authentication_failed",
+    "message": "Authentication credentials were not provided."
+  },
+  "meta": null
+}</code></pre>
+            </div> -->
+
+            <div class="code-block">
+                <div class="code-header"><span>Invalid API Key</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "authentication_failed",
+    "message": "Invalid API key."
+  },
+  "meta": null
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="list-jobs" class="section docs-section">
+            <h2>List jobs</h2>
+            <p>Retrieve a paginated list of jobs belonging to your business.</p>
+            <p>This endpoint is useful for dashboards, activity history, analytics, monitoring failed jobs, and viewing
+                recent extraction activity.</p>
+            <div class="endpoint"><span class="method">GET</span><span>/api/v1/jobs/</span></div>
+
+            <h2 style="margin-top: 60px;">Query parameters</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>status</code></td>
+                        <td>string</td>
+                        <td>Filter jobs by status. Possible values are <code>pending</code>, <code>successful</code>,
+                            and <code>failed</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>integer</td>
+                        <td>The page number to retrieve.</td>
+                    </tr>
+                    <tr>
+                        <td><code>page_size</code></td>
+                        <td>integer</td>
+                        <td>The number of jobs to return per page. Default is 20. Maximum of 100.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ordering</code></td>
+                        <td>string</td>
+                        <td>Sort jobs by date. Possible values are <code>latest</code> and <code>earliest</code>.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabs" data-group="list-jobs">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'list-jobs', 'list-jobs-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'list-jobs', 'list-jobs-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'list-jobs', 'list-jobs-curl')">cURL</button>
+            </div>
+
+            <div id="list-jobs-python" class="tab-panel active" data-group="list-jobs">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+response = requests.get(
+    "https://zendix.app/api/v1/jobs/?status=successful&page=1&page_size=3&ordering=earliest",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="list-jobs-javascript" class="tab-panel" data-group="list-jobs">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const response = await fetch(
+  "https://zendix.app/api/v1/jobs/?status=successful&page=1&page_size=3&ordering=earliest",
+  { headers: { Authorization: "Bearer YOUR_API_KEY" } }
+);
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="list-jobs-curl" class="tab-panel" data-group="list-jobs">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl "https://zendix.app/api/v1/jobs/?status=successful&page=1&page_size=3&ordering=earliest" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "count": 120,
+    "next": "https://zendix.app/api/v1/jobs/?ordering=earliest&page=2&page_size=3&status=successful",
+    "previous": null,
+    "results": [
+      {
+        "job_id": 145,
+        "status": "successful",
+        "client_reference_id": "inv_001",
+        "created_at": "2026-05-10T12:45:00Z",
+        ...
+      },
+      {
+        "job_id": 146,
+        "status": "failed",
+        "client_reference_id": null,
+        "created_at": "2026-05-10T12:50:00Z",
+        ...
+      }
+    ]
+  },
+  "meta": null
+}</code></pre>
+            </div>
+
+            <h2 style="margin-top: 80px;">Filtering jobs</h2>
+            <p>Zendix supports filtering jobs by status.</p>
+            <div class="workflow">
+                <div class="workflow-line">
+                    <div class="workflow-box">pending</div>
+                    <div class="workflow-box">successful</div>
+                    <div class="workflow-box">failed</div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 80px;">Pagination</h2>
+            <p>Job lists are paginated to improve performance and reduce response sizes.</p>
+            <div class="info-box"><strong>Default pagination</strong>
+                <p>Zendix returns paginated responses using <code>count</code>, <code>next</code>,
+                    <code>previous</code>, and <code>results</code> fields.
+                </p>
+            </div>
+
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>count</code></td>
+                        <td>integer</td>
+                        <td>Number of jobs retrieved for current page.</td>
+                    </tr>
+                    <tr>
+                        <td><code>next</code></td>
+                        <td>URL</td>
+                        <td>The URL to access the next page jobs.</td>
+                    </tr>
+                    <tr>
+                        <td><code>previous</code></td>
+                        <td>URL</td>
+                        <td>The URL to access the previous page jobs.</td>
+                    </tr>
+                    <tr>
+                        <td><code>results</code></td>
+                        <td>list</td>
+                        <td>A list of all jobs for the current page.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- <h2 style="margin-top: 80px;">Error responses</h2>
+            <div class="code-block">
+                <div class="code-header"><span>Authentication Error</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "authentication_failed",
+    "message": "Authentication credentials were not provided."
+  },
+  "meta": null
+}</code></pre>
+            </div> -->
+        </section>
+
+        <section id="create-job" class="section docs-section">
+            <h2>Create job</h2>
+            <p>Create an extraction job by sending files, text content, or both. Zendix processes the job asynchronously
+                and returns a job ID immediately.</p>
+            <div class="endpoint"><span class="method">POST</span><span>/api/v1/jobs/create/</span></div>
+
+            <h2 style="margin-top: 60px;">Request fields</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>schema_id</code></td>
+                        <td>integer</td>
+                        <td>yes</td>
+                        <td>ID of the schema used for extraction. Must belong to your business.</td>
+                    </tr>
+                    <tr>
+                        <td><code>document_type</code></td>
+                        <td>string</td>
+                        <td>yes</td>
+                        <td>The type of document being processed (e.g invoice, receipt, form).</td>
+                    </tr>
+                    <tr>
+                        <td><code>files</code></td>
+                        <td>file[]</td>
+                        <td>optional</td>
+                        <td>Uploaded documents. Max 10 files. Supported formats: pdf, png, jpg, jpeg, webp, txt.</td>
+                    </tr>
+                    <tr>
+                        <td><code>body</code></td>
+                        <td>string</td>
+                        <td>optional</td>
+                        <td>Raw text content to extract data from.</td>
+                    </tr>
+                    <tr>
+                        <td><code>client_reference_id</code></td>
+                        <td>string</td>
+                        <td>optional</td>
+                        <td>External ID used for tracking and idempotency.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box"><strong>Important rule</strong>
+                <p>You must provide either <code>files</code>, <code>body</code>, or both.</p>
+            </div>
+
+            <h2 style="margin-top: 60px;">Supported combinations</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Files</th>
+                        <th>Body</th>
+                        <th>Valid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>✔</td>
+                        <td>✖</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>✖</td>
+                        <td>✔</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>✔</td>
+                        <td>✔</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>✖</td>
+                        <td>✖</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 style="margin-top: 60px;">Limits</h2>
+            <ul>
+                <li>Maximum files: <strong>10</strong></li>
+                <li>Maximum total upload size: <strong>50MB</strong></li>
+                <li>Supported file formats: pdf, png, jpg, jpeg, webp, txt</li>
+            </ul>
+
+            <div class="tabs" data-group="create-job">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'create-job', 'create-job-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'create-job', 'create-job-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'create-job', 'create-job-curl')">cURL</button>
+            </div>
+
+            <div id="create-job-python" class="tab-panel active" data-group="create-job">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+url = "https://zendix.app/api/v1/jobs/create/"
+
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+files = [
+    ("files", open("invoice.pdf", "rb"))
+]
+
+data = {
+    "schema_id": 12,
+    "document_type": "invoice",
+    "client_reference_id": "inv_001"
+}
+
+response = requests.post(url, headers=headers, files=files, data=data)
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="create-job-javascript" class="tab-panel" data-group="create-job">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const formData = new FormData();
+
+formData.append("schema_id", 12);
+formData.append("document_type", "invoice");
+formData.append("client_reference_id", "inv_001");
+formData.append("files", fileInput.files[0]);
+
+const response = await fetch("https://zendix.app/api/v1/jobs/create/", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer YOUR_API_KEY"
+  },
+  body: formData
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="create-job-curl" class="tab-panel" data-group="create-job">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl -X POST https://zendix.app/api/v1/jobs/create/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "schema_id=12" \
+  -F "document_type=invoice" \
+  -F "client_reference_id=inv_001" \
+  -F "files=@invoice.pdf"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "status": "pending",
+    "result": null,
+    "error": null
+  },
+  "meta": {
+    "job_id": 145,
+    "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+  }
+}</code></pre>
+            </div>
+            <!-- <div class="code-block">
+                <div class="code-header"><span>Error Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "invalid_schema_id",
+    "message": "Schema does not exist or does not belong to this business."
+  },
+  "meta": null
+}</code></pre>
+            </div> -->
+            <div class="info-box"><strong>Next step</strong>
+                <p>After creating a job, you can poll for results using the job detail endpoint or receive results via
+                    webhooks.</p>
+            </div>
+        </section>
+
+        <section id="job-details" class="section docs-section">
+            <h2>Get job details</h2>
+            <p>Retrieve detailed information about a specific job using its job ID. This endpoint is commonly used for
+                polling job status until completion.</p>
+            <div class="endpoint"><span class="method">GET</span><span>/api/v1/jobs/{job_id}/detail/</span></div>
+
+            <h2 style="margin-top: 60px;">Path parameters</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>job_id</code></td>
+                        <td>integer</td>
+                        <td>The ID of the job to retrieve.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabs" data-group="job-details">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'job-details', 'job-details-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'job-details', 'job-details-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'job-details', 'job-details-curl')">cURL</button>
+            </div>
+
+            <div id="job-details-python" class="tab-panel active" data-group="job-details">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+job_id = 145
+
+response = requests.get(
+    f"https://zendix.app/api/v1/jobs/{job_id}/detail/",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="job-details-javascript" class="tab-panel" data-group="job-details">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const jobId = 145;
+
+const response = await fetch(
+  `https://zendix.app/api/v1/jobs/${jobId}/detail/`,
+  {
+    headers: { Authorization: "Bearer YOUR_API_KEY" }
+  }
+);
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="job-details-curl" class="tab-panel" data-group="job-details">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl https://zendix.app/api/v1/jobs/145/detail/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "status": "successful",
+    "result": {
+      "invoice_number": "INV-1001",
+      "total": 250.00
+    },
+    "error": null,
+    "details": {
+        "body": "",
+        "document_type": "invoice",
+        "schema_id": 12,
+        "skipped": false,
+        "file_count": 1,
+        "created_at": "2026-05-10T12:45:00Z",
+        ...
+    }
+  },
+  "meta": {
+    "job_id": 145,
+    "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+  }
+}</code></pre>
+            </div>
+            <!-- <div class="code-block">
+                <div class="code-header"><span>Error Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "job_not_found",
+    "message": "Job does not exist or does not belong to this business."
+  },
+  "meta": null
+}</code></pre>
+            </div> -->
+            <div class="info-box"><strong>Polling behavior</strong>
+                <p>You can call this endpoint repeatedly until the job status becomes <code>successful</code> or
+                    <code>failed</code>.
+                </p>
+            </div>
+        </section>
+
+        <section id="retry-job" class="section docs-section">
+            <h2>Retry job</h2>
+            <p>Retry a previously failed job. This will reprocess the same job configuration.</p>
+            <div class="endpoint"><span class="method">POST</span><span>/api/v1/jobs/{job_id}/retry/</span></div>
+            <h2 style="margin-top:60px;">Path parameters</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>job_id</code></td>
+                        <td>integer</td>
+                        <td>ID of the job to retry.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="info-box"><strong>Important</strong>
+                <p>Retry is only allowed for jobs with status <code>successful</code> or <code>failed</code>.</p>
+            </div>
+
+            <div class="tabs" data-group="retry-job">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'retry-job', 'retry-job-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'retry-job', 'retry-job-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'retry-job', 'retry-job-curl')">cURL</button>
+            </div>
+
+            <div id="retry-job-python" class="tab-panel active" data-group="retry-job">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+job_id = 145
+
+response = requests.post(
+    f"https://zendix.app/api/v1/jobs/{job_id}/retry/",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="retry-job-javascript" class="tab-panel" data-group="retry-job">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const jobId = 145;
+
+const response = await fetch(
+  `https://zendix.app/api/v1/jobs/${jobId}/retry/`,
+  {
+    method: "POST",
+    headers: { Authorization: "Bearer YOUR_API_KEY" }
+  }
+);
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="retry-job-curl" class="tab-panel" data-group="retry-job">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl -X POST https://zendix.app/api/v1/jobs/145/retry/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "status": "pending",
+    "result": null,
+    "error": null
+  },
+  "meta": {
+    "job_id": 145,
+    "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="delete-job" class="section docs-section">
+            <h2>Delete job</h2>
+            <p>Permanently delete a job and its associated files (if any).</p>
+            <div class="endpoint"><span class="method">DELETE</span><span>/api/v1/jobs/{job_id}/delete/</span></div>
+            <h2 style="margin-top:60px;">Path parameters</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>job_id</code></td>
+                        <td>integer</td>
+                        <td>ID of the job to delete.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="info-box"><strong>Warning</strong>
+                <p>This action is irreversible.</p>
+            </div>
+
+            <div class="tabs" data-group="delete-job">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'delete-job', 'delete-job-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'delete-job', 'delete-job-javascript')">JavaScript</button>
+                <button class="tab-btn" onclick="switchTab(event, 'delete-job', 'delete-job-curl')">cURL</button>
+            </div>
+
+            <div id="delete-job-python" class="tab-panel active" data-group="delete-job">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+job_id = 145
+
+response = requests.delete(
+    f"https://zendix.app/api/v1/jobs/{job_id}/delete/",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="delete-job-javascript" class="tab-panel" data-group="delete-job">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const jobId = 145;
+
+const response = await fetch(
+  `https://zendix.app/api/v1/jobs/${jobId}/delete/`,
+  {
+    method: "DELETE",
+    headers: { Authorization: "Bearer YOUR_API_KEY" }
+  }
+);
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="delete-job-curl" class="tab-panel" data-group="delete-job">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl -X DELETE https://zendix.app/api/v1/jobs/145/delete/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "message": "Job deleted successfully."
+  },
+  "meta": {
+    "job_id": 145
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="job-by-reference" class="section docs-section">
+            <h2>Get job by client reference ID</h2>
+            <p>Retrieve a job using its client reference ID. Useful when you do not store internal job IDs.</p>
+            <div class="endpoint"><span
+                    class="method">GET</span><span>/api/v1/jobs/{client_reference_id}/by-reference/</span></div>
+            <h2 style="margin-top:60px;">Path parameters</h2>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>client_reference_id</code></td>
+                        <td>string</td>
+                        <td>The client reference ID used when creating the job.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tabs" data-group="get-job-by-reference">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'get-job-by-reference', 'get-job-by-reference-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'get-job-by-reference', 'get-job-by-reference-javascript')">JavaScript</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'get-job-by-reference', 'get-job-by-reference-curl')">cURL</button>
+            </div>
+
+            <div id="get-job-by-reference-python" class="tab-panel active" data-group="get-job-by-reference">
+                <div class="code-block">
+                    <div class="code-header"><span>Python</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import requests
+
+job_id = 145
+
+response = requests.get(
+    f"https://zendix.app/api/v1/jobs/{job_id}/by-reference/",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+print(response.json())</code></pre>
+                </div>
+            </div>
+            <div id="get-job-by-reference-javascript" class="tab-panel" data-group="get-job-by-reference">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>const jobId = 145;
+
+const response = await fetch(
+  `https://zendix.app/api/v1/jobs/${jobId}/by-reference/`,
+  {
+    headers: { Authorization: "Bearer YOUR_API_KEY" }
+  }
+);
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+            <div id="get-job-by-reference-curl" class="tab-panel" data-group="get-job-by-reference">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl https://zendix.app/api/v1/jobs/145/by-reference/ \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>JSON Response</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "job_id": 145,
+    "status": "successful"
+  },
+  "meta": {
+    "client_reference_id": "inv_001"
+  }
+}</code></pre>
+            </div>
+        </section>
+
+        <section id="rate-limiting" class="section docs-section">
+            <h2>Rate limiting</h2>
+            <p>Zendix enforces rate limits to ensure fair usage and system stability.</p>
+            <div class="info-box"><strong>Note</strong>
+                <p>Rate limits are applied per API key and per business.</p>
+            </div>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Rate Limit</th>
+                        <th>Window</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>API key</td>
+                        <td>100 requests</td>
+                        <td>per minute</td>
+                    </tr>
+                    <tr>
+                        <td>Business</td>
+                        <td>300 requests</td>
+                        <td>per minute</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top:40px;">All API keys belonging to a business can each make a maximum of 100 requests per
+                minute,
+                and collectively make a maximum of 300 requests per minute.
+            </p>
+
+            <!-- <h3 style="margin-top:40px;">Headers</h3>
+            <ul>
+                <li><code>X-RateLimit-Limit</code>: Maximum allowed requests</li>
+                <li><code>X-RateLimit-Remaining</code>: Remaining requests</li>
+                <li><code>X-RateLimit-Reset</code>: Time until reset</li>
+            </ul> -->
+        </section>
+
+        <section id="file-limits" class="section docs-section">
+            <h2>File limits</h2>
+            <p>Zendix enforces strict file upload limits to ensure performance and reliability.</p>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Limit</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maximum files</td>
+                        <td>10 files</td>
+                    </tr>
+                    <tr>
+                        <td>Total upload size</td>
+                        <td>50MB</td>
+                    </tr>
+                    <tr>
+                        <td>Supported formats</td>
+                        <td>pdf, png, jpg, jpeg, webp, txt</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="error-codes" class="section docs-section">
+            <h2>Error codes</h2>
+            <p>All errors follow a standardized structure to make debugging simple and predictable.</p>
+            <div class="code-block">
+                <div class="code-header"><span>Error response format</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+  "success": false,
+  "error": {
+    "code": "error_code",
+    "message": "Human readable message"
+  },
+  "meta": null
+}</code></pre>
+            </div>
+            <h3 style="margin-top:40px;">Common error codes</h3>
+            <!-- <ul>
+                <li><code>authentication_failed</code> – Missing or invalid API key</li>
+                <li><code>invalid_schema_id</code> – Schema not found or not owned by business</li>
+                <li><code>validation_error</code> – Invalid request payload</li>
+                <li><code>job_not_found</code> – Job does not exist</li>
+                <li><code>rate_limited</code> – Too many requests</li>
+                <li><code>file_upload_failed</code> – File upload error</li>
+                <li><code>duplicate_reference_id</code> – Client reference already exists</li>
+            </ul> -->
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>validation_error</code></td>
+                        <td>Invalid request data</td>
+                    </tr>
+                    <tr>
+                        <td><code>method_not_allowed</code></td>
+                        <td>Request method not allowed</td>
+                    </tr>
+                    <tr>
+                        <td><code>rate_limit_exceeded</code></td>
+                        <td>Too many requests</td>
+                    </tr>
+                    <tr>
+                        <td><code>authentication_failed</code></td>
+                        <td>Invalid API key</td>
+                    </tr>
+                    <tr>
+                        <td><code>parse_error</code></td>
+                        <td>Invalid form data</td>
+                    </tr>
+                    <tr>
+                        <td><code>file_storage_limit_exceeded</code></td>
+                        <td>Insufficient file storage</td>
+                    </tr>
+                    <tr>
+                        <td><code>file_not_stored</code></td>
+                        <td>A file in request files failed to upload</td>
+                    </tr>
+                    <tr>
+                        <td><code>duplicate_client_reference_id</code></td>
+                        <td>A job with client reference ID already exists</td>
+                    </tr>
+                    <tr>
+                        <td><code>job_not_found</code></td>
+                        <td>Job does not exist</td>
+                    </tr>
+                    <tr>
+                        <td><code>job_cannot_be_retried</code></td>
+                        <td>Job is pending and can't be retried</td>
+                    </tr>
+                    <tr>
+                        <td><code>job_cannot_be_deleted</code></td>
+                        <td>Job is pending and can't be deleted</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="webhooks" class="section docs-section">
+            <h2>Webhooks</h2>
+            <p>Zendix can send job completion events to your server using webhooks. Webhooks are useful when you want
+                Zendix to notify your backend automatically instead of polling for results.</p>
+
+            <div class="info-box"><strong>Important</strong>
+                <p>Webhook delivery is configured on your API key. When a webhook URL exists on the API key, Zendix will
+                    attempt to send webhook events for jobs created with that key.</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">How to enable webhooks</h3>
+            <p>To enable webhooks, set a webhook URL on the API key in your Zendix dashboard. Zendix uses that URL as
+                the destination for webhook events.</p>
+
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>webhook_url</code></td>
+                        <td>string</td>
+                        <td>The URL Zendix sends webhook requests to.</td>
+                    </tr>
+                    <tr>
+                        <td><code>webhook_secret</code></td>
+                        <td>string</td>
+                        <td>Used to sign webhook payloads so you can verify they came from Zendix.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top:40px;">How to prepare your server</h3>
+            <p>Your server must accept <code>POST</code> requests with JSON payloads. It should respond with a
+                successful status code quickly, ideally within a few seconds.</p>
+            <ul>
+                <li>Use an HTTPS endpoint.</li>
+                <li>Accept JSON request bodies.</li>
+                <li>Read the raw request body when verifying the signature.</li>
+                <li>Return a 2xx response when the webhook is processed successfully.</li>
+            </ul>
+
+            <h3 style="margin-top:40px;">Webhook signature verification</h3>
+            <p>Zendix signs each webhook using your webhook secret. Your server should verify the signature before
+                trusting the payload.</p>
+
+            <div class="tabs" data-group="webhooks-signature">
+                <button class="tab-btn active"
+                    onclick="switchTab(event, 'webhooks-signature', 'webhooks-signature-python')">Python</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'webhooks-signature', 'webhooks-signature-javascript')">JavaScript</button>
+                <button class="tab-btn"
+                    onclick="switchTab(event, 'webhooks-signature', 'webhooks-signature-curl')">cURL</button>
+            </div>
+
+            <div id="webhooks-signature-python" class="tab-panel active" data-group="webhooks-signature">
+                <div class="code-block">
+                    <div class="code-header"><span>Python verification</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import hmac
+import hashlib
+
+signature = request.headers.get("X-Zendix-Signature")
+raw_body = request.body
+
+expected = hmac.new(
+    webhook_secret.encode(),
+    raw_body,
+    hashlib.sha256
+).hexdigest()
+
+if not hmac.compare_digest(signature, expected):
+    return Response(status=401)</code></pre>
+                </div>
+            </div>
+
+            <div id="webhooks-signature-javascript" class="tab-panel" data-group="webhooks-signature">
+                <div class="code-block">
+                    <div class="code-header"><span>JavaScript verification</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>import crypto from "crypto";
+
+const signature = req.header("X-Zendix-Signature");
+const rawBody = req.rawBody;
+
+const expected = crypto
+  .createHmac("sha256", webhookSecret)
+  .update(rawBody)
+  .digest("hex");
+
+if (signature !== expected) {
+  return res.sendStatus(401);
+}</code></pre>
+                </div>
+            </div>
+
+            <div id="webhooks-signature-curl" class="tab-panel" data-group="webhooks-signature">
+                <div class="code-block">
+                    <div class="code-header"><span>cURL test request</span><button class="copy-btn"
+                            onclick="copyCode(this)">Copy</button></div>
+                    <pre><code>curl -X POST https://your-server.com/webhooks/zendix \
+  -H "Content-Type: application/json" \
+  -H "X-Zendix-Signature: your_signature_here" \
+  -d '{"event":"job.completed"}'</code></pre>
+                </div>
+            </div>
+
+
+            <h3 style="margin-top:40px;">Webhook payload</h3>
+            <div class="code-block">
+                <div class="code-header"><span>Example payload (job successful)</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+    "event": "job.completed",
+    "data": {
+        "status": "successful",
+        "result": {
+            "invoice_number": "INV-1001",
+            "total": 250.00
+        },
+        "error": null,
+        "details": {
+            "body": "",
+            "document_type": "invoice",
+            "schema_id": 12,
+            "skipped": false,
+            "file_count": 1,
+            "created_at": "2026-05-10T12:45:00Z",
+            ...
+        }
+    },
+    "meta": {
+        "job_id": 145,
+        "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header"><span>Example payload (job failed)</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copy</button></div>
+                <pre><code>{
+    "event": "job.failed",
+    "data": {
+        "status": "failed",
+        "result": null,
+        "error": "error_message",
+        "details": {
+            "body": "",
+            "document_type": "invoice",
+            "schema_id": 12,
+            "skipped": false,
+            "file_count": 1,
+            "created_at": "2026-05-10T12:45:00Z",
+            ...
+        }
+    },
+    "meta": {
+        "job_id": 145,
+        "client_reference_id": "inv_001" // present if job was created with a client_reference_id
+    }
+}</code></pre>
+            </div>
+
+            <h3 style="margin-top:40px;">Webhook failure tracking</h3>
+            <p>If Zendix fails to send a webhook for a job, the job keeps its extraction result, but the webhook
+                delivery failure is recorded on the job.</p>
+            <ul>
+                <li><code>job.webhook_failed</code> indicates whether webhook delivery failed.</li>
+                <li><code>job.webhook_last_error</code> stores the latest webhook error message.</li>
+            </ul>
+            <div class="info-box"><strong>How to debug delivery issues</strong>
+                <p>If a webhook did not arrive, check the job record in Zendix and inspect <code>webhook_failed</code>
+                    and <code>webhook_last_error</code>. This helps you understand whether Zendix attempted delivery and
+                    why it failed. API key webhook settings like <code>webhook URL</code> and <code>webhook secret</code> are copied unto jobs when they are created.
+                    This ensures queued jobs can still deliver webhook events even if the original API key is later changed or deleted. Remember to disable CSRF protection
+                    for your server URL endpoint recieving webhooks, so as to ensure your server doesn't block the job's webhook <code>POST</code> request.
+                </p>
+            </div>
+
+            <h3 style="margin-top:40px;">Notes</h3>
+            <ul>
+                <li>Webhooks are sent from the extraction worker.</li>
+                <li>Webhook delivery failure does not change the job result.</li>
+                <li>Webhook URL is configured at the API key level.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        function copyCode(button) {
+            const code = button.parentElement.nextElementSibling.innerText;
+            navigator.clipboard.writeText(code);
+            const original = button.innerText;
+            button.innerText = 'Copied!';
+            setTimeout(() => { button.innerText = original; }, 2000);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.mobile-overlay').classList.toggle('show-overlay');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.querySelector('.mobile-overlay').classList.remove('show-overlay');
+        }
+
+        function switchTab(event, group, tabId) {
+            document.querySelectorAll(`.tab-panel[data-group="${group}"]`).forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll(`.tabs[data-group="${group}"] .tab-btn`).forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        const sections = Array.from(document.querySelectorAll('.docs-section'));
+        const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+
+        function updateActiveNav() {
+            const scrollPosition = window.scrollY + 150;
+            let currentId = 'overview';
+
+            sections.forEach(section => {
+                if (scrollPosition >= section.offsetTop) {
+                    currentId = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        window.addEventListener('load', updateActiveNav);
+
+        document.querySelectorAll('.sidebar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) closeSidebar();
+            });
+        });
+    </script>
+</body>
+
+</html>
